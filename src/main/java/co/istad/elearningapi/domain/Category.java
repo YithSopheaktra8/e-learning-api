@@ -25,9 +25,8 @@ public class Category {
 
     private Boolean isDeleted;
 
+    @Column(unique = true)
     private String name;
 
     private Integer parentCategoryId;
-
-
 }

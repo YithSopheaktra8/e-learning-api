@@ -1,7 +1,9 @@
 package co.istad.elearningapi.features.category;
 
+import co.istad.elearningapi.base.BasedMessage;
 import co.istad.elearningapi.domain.Category;
-import co.istad.elearningapi.features.category.dto.CategoryCreateRequest;
+import co.istad.elearningapi.features.category.dto.CategoryParentResponse;
+import co.istad.elearningapi.features.category.dto.CategoryRequest;
 import co.istad.elearningapi.features.category.dto.CategoryResponse;
 import co.istad.elearningapi.mapper.CategoryMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -22,16 +25,16 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public void createCategory(CategoryCreateRequest categoryCreateRequest) {
+    public void createCategory(CategoryRequest categoryRequest) {
 
-        if(categoryRepository.existsByName(categoryCreateRequest.name())){
+        if(categoryRepository.existsByName(categoryRequest.name())){
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     "Category is already existed!"
             );
         }
 
-        Category category = categoryMapper.fromCategoryCreateRequest(categoryCreateRequest);
+        Category category = categoryMapper.fromCategoryCreateRequest(categoryRequest);
         if(category.getParentCategoryId().equals(0)){
             category.setParentCategoryId(null);
         }
@@ -60,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
         PageRequest pageRequest = PageRequest.of(page,size);
-        Page<Category> categories = categoryRepository.findAll(pageRequest);
+        Page<Category> categories = categoryRepository.findAllByIsDeletedFalse(pageRequest);
 
         if(categories.isEmpty()){
             throw new ResponseStatusException(
@@ -73,30 +76,47 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryResponse> findAllParentCategory() {
+    public List<CategoryParentResponse> findAllParentCategory() {
 
         List<Category> categories = categoryRepository.findAllByParentCategoryIdIsNull();
 
-        return categoryMapper.toCategoryResponseList(categories);
+        return categoryMapper.toCategoryParentResponse(categories);
     }
 
     @Override
     public CategoryResponse findCategoryByAlias(String alias) {
 
-        if(!categoryRepository.existsByAlias(alias)){
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Category has not been found!"
-            );
-        }
-
-        Category category = categoryRepository.findByAlias(alias);
+        Category category = categoryRepository.findByAlias(alias)
+                .orElseThrow(()-> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Category has not been found!"
+                ));
 
         return categoryMapper.toCategoryResponse(category);
     }
 
     @Override
-    public CategoryResponse editCategory(String alias, CategoryCreateRequest categoryCreateRequest) {
+    public CategoryResponse editCategory(String alias, CategoryRequest categoryRequest) {
+
+        Category category = categoryRepository.findByAlias(alias)
+                        .orElseThrow(()->new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Category has not been found!"
+                        ));
+
+        category.setName(categoryRequest.name());
+        category.setIcon(categoryRequest.icon());
+        category.setAlias(categoryRequest.alias());
+        category.setParentCategoryId(categoryRequest.parentCategoryId());
+
+        category = categoryRepository.save(category);
+
+        return categoryMapper.toCategoryResponse(category);
+    }
+
+    @Transactional
+    @Override
+    public BasedMessage disableCategory(String alias) {
 
         if(!categoryRepository.existsByAlias(alias)){
             throw new ResponseStatusException(
@@ -105,8 +125,8 @@ public class CategoryServiceImpl implements CategoryService {
             );
         }
 
-        Category category = categoryRepository.findByAlias(alias);
+        categoryRepository.disableCategoryByAlias(alias);
 
-        return null;
+        return new BasedMessage("Category has been disabled");
     }
 }

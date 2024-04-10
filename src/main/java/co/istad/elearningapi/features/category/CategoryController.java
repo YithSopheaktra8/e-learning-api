@@ -1,7 +1,9 @@
 package co.istad.elearningapi.features.category;
 
 
-import co.istad.elearningapi.features.category.dto.CategoryCreateRequest;
+import co.istad.elearningapi.base.BasedMessage;
+import co.istad.elearningapi.features.category.dto.CategoryParentResponse;
+import co.istad.elearningapi.features.category.dto.CategoryRequest;
 import co.istad.elearningapi.features.category.dto.CategoryResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,8 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createNew(@Valid @RequestBody CategoryCreateRequest categoryCreateRequest){
-        categoryService.createCategory(categoryCreateRequest);
+    public void createNew(@Valid @RequestBody CategoryRequest categoryRequest){
+        categoryService.createCategory(categoryRequest);
     }
 
     @GetMapping
@@ -33,7 +35,7 @@ public class CategoryController {
     }
 
     @GetMapping("/parents")
-    public List<CategoryResponse> findAllParent(){
+    public List<CategoryParentResponse> findAllParent(){
         return categoryService.findAllParentCategory();
     }
 
@@ -41,5 +43,17 @@ public class CategoryController {
     public CategoryResponse findByAlias(@PathVariable String alias){
         return categoryService.findCategoryByAlias(alias);
     }
+
+    @PutMapping("/{alias}")
+    public CategoryResponse editCategory(@PathVariable String alias,
+                                         @Valid @RequestBody CategoryRequest categoryRequest){
+        return categoryService.editCategory(alias,categoryRequest);
+    }
+
+    @PutMapping("/{alias}/disable")
+    public BasedMessage disableCategory(@PathVariable String alias){
+        return categoryService.disableCategory(alias);
+    }
+
 
 }

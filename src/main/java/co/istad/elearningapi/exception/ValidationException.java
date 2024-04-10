@@ -15,6 +15,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ValidationException {
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseErrorResponse handleValidationError(MethodArgumentNotValidException ex){

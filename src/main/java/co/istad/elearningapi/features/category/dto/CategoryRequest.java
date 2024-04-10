@@ -2,7 +2,7 @@ package co.istad.elearningapi.features.category.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record CategoryCreateRequest(
+public record CategoryRequest(
         @NotBlank(message = "Category name is required")
         String name,
 

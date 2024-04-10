@@ -1,4 +1,9 @@
 package co.istad.elearningapi.features.course.dto;
 
-public class CourseThumbnailRequest {
+import jakarta.validation.constraints.NotBlank;
+
+public record CourseThumbnailRequest(
+        @NotBlank(message = "Course thumbnail is required")
+        String thumbnail
+) {
 }

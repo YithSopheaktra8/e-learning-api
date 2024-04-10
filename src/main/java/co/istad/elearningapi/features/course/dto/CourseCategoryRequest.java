@@ -1,4 +1,9 @@
 package co.istad.elearningapi.features.course.dto;
 
-public record CourseCategoryRequest() {
+import jakarta.validation.constraints.NotBlank;
+
+public record CourseCategoryRequest(
+        @NotBlank(message = "Category alias is required")
+        String categoryAlias
+) {
 }

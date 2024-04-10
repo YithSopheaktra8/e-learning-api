@@ -35,7 +35,7 @@ public class Course {
     @JoinColumn(name = "cat_id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ins_id")
     private Instructor instructor;
 }

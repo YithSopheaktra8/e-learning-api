@@ -24,7 +24,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     Page<Category> findAllByIsDeletedFalse(PageRequest pageRequest);
 
-
     @Modifying
     @Query("UPDATE Category as ca SET ca.isDeleted = true WHERE ca.alias = ?1")
     void disableCategoryByAlias(String alias);

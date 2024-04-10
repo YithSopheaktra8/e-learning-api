@@ -15,8 +15,6 @@ public interface CategoryMapper {
 
     CategoryResponse toCategoryResponse(Category category);
 
-    List<CategoryResponse> toCategoryResponseList(List<Category> categories);
-
     List<CategoryParentResponse> toCategoryParentResponse(List<Category> categories);
 
 }

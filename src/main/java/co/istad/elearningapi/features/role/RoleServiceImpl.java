@@ -9,7 +9,9 @@ import co.istad.elearningapi.mapper.AuthorityMapper;
 import co.istad.elearningapi.mapper.RoleMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,15 @@ public class RoleServiceImpl implements RoleService {
     }
         @Override
         public RoleResponse findByName (String name){
-            return null;
+        if(!roleRepository.existsByName(name)){
+            throw  new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Role does not exist!"
+            );
+        }
+        Role role = roleRepository.findByName(name);
+        RoleResponse roleResponse = roleMapper.toRoleResponse(role);
+            return roleResponse;
         }
 
 }

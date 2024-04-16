@@ -9,11 +9,10 @@ import java.util.List;
 
 public record UserDetailsResponse(
         String uuid,
-        String username,
+        String userName,
         String profile,
         LocalDate dob,
         Country country,
-        City city,
         List<Role> roles
 ) {
 }

@@ -16,8 +16,8 @@ public class EnrollmentController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    void createNewEnroll(@Valid @RequestBody EnrollmentCreateRequest enrollmentCreateRequest){
-        enrollmentService.createNewEnroll(enrollmentCreateRequest, enrollmentCreateRequest.code());
+    void createNewEnroll(@Valid @RequestBody EnrollmentCreateRequest enrollmentCreateRequest, Long courseId){
+        enrollmentService.createNewEnroll(enrollmentCreateRequest, courseId);
     }
 
     @GetMapping

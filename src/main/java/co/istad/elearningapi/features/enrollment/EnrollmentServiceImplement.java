@@ -1,6 +1,9 @@
 package co.istad.elearningapi.features.enrollment;
 
+import co.istad.elearningapi.domain.Course;
 import co.istad.elearningapi.domain.Enrollment;
+import co.istad.elearningapi.features.course.CourseRepository;
+import co.istad.elearningapi.features.enrollment.dto.CourseIdResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentCreateRequest;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
 import co.istad.elearningapi.mapper.EnrollmentMapper;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,20 +27,28 @@ import java.util.UUID;
 public class EnrollmentServiceImplement implements EnrollmentService{
     private final EnrollmentRepository enrollmentRepository;
     private final EnrollmentMapper enrollmentMapper;
+    private final CourseRepository courseRepository;
     @Override
-    public void createNewEnroll(EnrollmentCreateRequest enrollmentCreateRequest, String code) {
-        if (enrollmentRepository.existsByCode(code)){
+    public void createNewEnroll(EnrollmentCreateRequest enrollmentCreateRequest, Long courseId) {
+        if (enrollmentRepository.existsByCode(enrollmentCreateRequest.code())){
             throw new ResponseStatusException(
                 HttpStatus.CONFLICT, "This user has been enrolled"
             );
         }
         Enrollment enrollment = enrollmentMapper.fromEnrollCreateRequest(enrollmentCreateRequest);
-        enrollment.setEnrolledAt(null);
-        enrollment.setCode(UUID.randomUUID().toString());
         enrollment.setCertifiedAt(null);
         enrollment.setIsCertified(false);
         enrollment.setIsDeleted(false);
         enrollment.setEnrolledAt(LocalDateTime.now());
+        enrollment.setProgress(0);
+
+        // Find the course by ID and set it for the enrollment
+        Course selectCourse = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "You can not select this course"
+                ));
+        enrollment.setCourse(selectCourse);  // Set a single course directly
 
         enrollmentRepository.save(enrollment);
     }

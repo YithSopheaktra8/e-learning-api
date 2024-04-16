@@ -15,10 +15,9 @@ public record EnrollmentResponse(
         LocalDateTime enrolledAt,
         Boolean isCertified,
         Boolean isDeleted,
-        LocalDateTime certifiedAt
-
-//        @NotEmpty
-//        Course course,
+        LocalDateTime certifiedAt,
+        @NotEmpty
+        Course course
 //        @NotEmpty
 //        List<Student> students
 ) {

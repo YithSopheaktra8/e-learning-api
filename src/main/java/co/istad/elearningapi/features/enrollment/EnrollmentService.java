@@ -5,7 +5,7 @@ import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
 import org.springframework.data.domain.Page;
 
 public interface EnrollmentService {
-    void createNewEnroll(EnrollmentCreateRequest enrollmentCreateRequest, String code);
+    void createNewEnroll(EnrollmentCreateRequest enrollmentCreateRequest, Long courseId);
 
     Page<EnrollmentResponse> findAllEnrollment(int page, int size, String sortOrder);
 

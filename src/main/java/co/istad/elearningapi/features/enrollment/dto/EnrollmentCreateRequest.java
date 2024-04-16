@@ -1,19 +1,16 @@
 package co.istad.elearningapi.features.enrollment.dto;
 
-import co.istad.elearningapi.domain.Course;
-import co.istad.elearningapi.domain.Student;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
-import java.util.List;
+import co.istad.elearningapi.domain.Course;
+import co.istad.elearningapi.features.course.dto.CourseResponse;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 
 public record EnrollmentCreateRequest(
         @NotBlank
-        String code,
-        Integer progress
-//        @NotEmpty
-//        Course course,
-//        @NotEmpty
-//        List<Student> students
+        @Size(max = 999999)
+        String code
+
 ) {
 }

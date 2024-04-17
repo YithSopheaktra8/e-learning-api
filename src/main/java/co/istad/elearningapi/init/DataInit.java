@@ -1,19 +1,16 @@
 package co.istad.elearningapi.init;
 
 
-import co.istad.elearningapi.base.BasedMessage;
 import co.istad.elearningapi.domain.Authority;
 import co.istad.elearningapi.domain.City;
 import co.istad.elearningapi.domain.Country;
 import co.istad.elearningapi.domain.Role;
-import co.istad.elearningapi.features.authority.AuthorityRepository;
 import co.istad.elearningapi.features.city.CityRepository;
 import co.istad.elearningapi.features.country.CountryRepository;
 import co.istad.elearningapi.features.role.RoleRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +25,7 @@ public class DataInit {
     private final CityRepository cityRepository;
 
     @PostConstruct
-    void initRole () {
+    void initRole() {
         if (roleRepository.count() < 1) {
             Role user = new Role();
             user.setName("USER");
@@ -46,16 +43,15 @@ public class DataInit {
             admin.setName("ADMIN");
             admin.setAuthorities(createAdminAuthorities());
 
-
             roleRepository.saveAll(List.of(user, student, instructor, admin));
 
         }
     }
 
     @PostConstruct
-    void initCountryAndCities(){
+    void initCountryAndCities() {
 
-        if(countryRepository.count() < 1 && cityRepository.count() < 1){
+        if (countryRepository.count() < 1 && cityRepository.count() < 1) {
             Country cambodia = Country.builder()
                     .flag("https://w7.pngwing.com/pngs/930/954/png-transparent-flag-of-cambodia-national-flag-graphy-flag-thumbnail.png")
                     .iso("KHM")
@@ -121,14 +117,13 @@ public class DataInit {
             singaporeCities.add(yishun);
 
 
-
             cityRepository.save(yishun);
             cityRepository.save(kg);
 
         }
     }
 
-    private List<Authority> createUserAuthorities(){
+    private List<Authority> createUserAuthorities() {
         Authority userRead = new Authority();
         userRead.setName("user:read");
 
@@ -151,13 +146,15 @@ public class DataInit {
 
         Authority eLearningRead = new Authority();
         eLearningRead.setName("elearning:read");
-        return List.of(userRead,userWrite, userDelete, userUpdate, progressRead, eLearningRead);
+        return List.of(userRead, userWrite, userDelete, userUpdate, progressRead, eLearningRead);
     }
+
     private List<Authority> createStudentAuthorities() {
         Authority progressWrite = new Authority();
         progressWrite.setName("progress:write");
         return List.of(progressWrite);
     }
+
     private List<Authority> createInstructorAuthorities() {
         Authority eLearningWrite = new Authority();
         eLearningWrite.setName("elearning:write");
@@ -170,8 +167,9 @@ public class DataInit {
         Authority eLearningUpdate = new Authority();
         eLearningUpdate.setName("elearning:update");
 
-       return List.of(eLearningWrite, eLearningDelete, eLearningUpdate);
+        return List.of(eLearningWrite, eLearningDelete, eLearningUpdate);
     }
+
     private List<Authority> createAdminAuthorities() {
         List<Authority> authorities = new ArrayList<>();
         authorities.addAll(createUserAuthorities());

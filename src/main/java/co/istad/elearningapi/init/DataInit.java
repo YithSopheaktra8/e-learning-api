@@ -1,28 +1,31 @@
 package co.istad.elearningapi.init;
 
 
-import co.istad.elearningapi.domain.Authority;
-import co.istad.elearningapi.domain.City;
-import co.istad.elearningapi.domain.Country;
-import co.istad.elearningapi.domain.Role;
+import co.istad.elearningapi.domain.*;
 import co.istad.elearningapi.features.city.CityRepository;
 import co.istad.elearningapi.features.country.CountryRepository;
 import co.istad.elearningapi.features.role.RoleRepository;
+import co.istad.elearningapi.features.user.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class DataInit {
 
     private final RoleRepository roleRepository;
     private final CountryRepository countryRepository;
     private final CityRepository cityRepository;
+    private final UserRepository userRepository;
 
     @PostConstruct
     void initRole() {
@@ -120,6 +123,42 @@ public class DataInit {
             cityRepository.save(yishun);
             cityRepository.save(kg);
 
+        }
+    }
+
+    @PostConstruct
+    void initAdmin(){
+
+        if(userRepository.count() < 1){
+            LocalDate dob = LocalDate.of(1999,7,1);
+            Country cam = countryRepository.findByName("CAMBODIA");
+            City city = cityRepository.findByName("PHNOM PENH");
+            Role role = roleRepository.findByName("ADMIN");
+
+            log.info("city {}",city);
+            log.info("country {}",cam);
+
+            User admin = User.builder()
+                    .uuid(UUID.randomUUID().toString())
+                    .isDeleted(false)
+                    .isVerified(true)
+                    .password("tra1122")
+                    .profile("AVATAR.PNG")
+                    .dob(dob)
+                    .userName("pheaktra")
+                    .email("pheaktra@gmail.com")
+                    .familyName("yith")
+                    .givenName("sopheaktra")
+                    .address1("Phnom Penh")
+                    .gender("Male")
+                    .country(cam)
+                    .city(city)
+                    .roles(List.of(role))
+                    .nationalIdCard("12311461")
+                    .phoneNumber("0967174832")
+                    .build();
+
+            userRepository.save(admin);
         }
     }
 

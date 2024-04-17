@@ -56,8 +56,8 @@ public class UserController {
     // Permanently delete a use
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{username}")
-    void deleteUser (@PathVariable String username){
-        userService.deleteByUserName(username);
+    BasedMessage deleteUser (@PathVariable String username){
+        return userService.deleteByUserName(username);
     }
 
 

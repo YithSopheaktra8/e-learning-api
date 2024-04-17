@@ -14,18 +14,18 @@ import java.util.List;
 @RequestMapping("/api/v1/roles")
 @RequiredArgsConstructor
 public class RoleController {
-   private final RoleService roleService;
+    private final RoleService roleService;
 
-   // Find All
+    // Find All
     @GetMapping
-    List<RoleResponse> findAll(){
+    List<RoleResponse> findAll() {
         return roleService.findAll();
     }
 
     // Find by name
     @GetMapping("/{name}")
     RoleResponse findByByName(@PathVariable String name) {
-        return  roleService.findByName(name);
+        return roleService.findByName(name);
     }
 
 }

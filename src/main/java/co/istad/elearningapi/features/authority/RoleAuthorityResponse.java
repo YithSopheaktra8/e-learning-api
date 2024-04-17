@@ -1,6 +1,6 @@
 package co.istad.elearningapi.features.authority;
 
-public record AuthorityResponse(
+public record RoleAuthorityResponse(
         String name
 ) {
 }

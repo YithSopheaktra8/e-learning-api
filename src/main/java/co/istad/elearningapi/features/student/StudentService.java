@@ -1,2 +1,4 @@
-package co.istad.elearningapi.features.student;public interface StudentService {
+package co.istad.elearningapi.features.student;
+
+public interface StudentService {
 }

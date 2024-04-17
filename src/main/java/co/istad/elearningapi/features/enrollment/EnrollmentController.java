@@ -39,14 +39,14 @@ public class EnrollmentController {
         return enrollmentService.findDetailEnrollment(code);
     }
 
-    @PatchMapping("/{code}/progress")
+    @PutMapping("/{code}/progress")
     EnrollmentResponse updateProgressByCode(@PathVariable String code,
-                              @RequestBody EnrollmentUpdateRequest enrollmentUpdateRequest) {
-        return enrollmentService.updateProgressByCode(code, enrollmentUpdateRequest);
+                              @RequestBody EnrollmentProgressRequest enrollmentProgressRequest) {
+        return enrollmentService.updateProgressByCode(code, enrollmentProgressRequest);
     }
 
     @PutMapping("/{code}/is-certified")
-    BasedMessage updateProgressByCode(@PathVariable String code) {
+    BasedMessage getCertify(@PathVariable String code) {
         return enrollmentService.updateCertification(code);
     }
 

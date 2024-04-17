@@ -11,7 +11,7 @@ public interface EnrollmentService {
 
     EnrollmentProgressResponse findEnrollmentProgress(String code);
 
-    EnrollmentResponse updateProgressByCode(String code, EnrollmentUpdateRequest enrollmentUpdateRequest);
+    EnrollmentResponse updateProgressByCode(String code, EnrollmentProgressRequest enrollmentProgressRequest);
 
     BasedMessage updateCertification(String code);
 

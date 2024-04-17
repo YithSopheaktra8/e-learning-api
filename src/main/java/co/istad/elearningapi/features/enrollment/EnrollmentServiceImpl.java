@@ -79,9 +79,8 @@ public class EnrollmentServiceImpl implements EnrollmentService{
         if (size < 1){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Size must be greater than or equal to one");
         }
-//        Sort sortByDate = Sort.by(sortOrder.equalsIgnoreCase("desc") ?
-//                Sort.Direction.DESC : Sort.Direction.ASC, "enrolledAt");
-        PageRequest pageRequest = PageRequest.of(page, size);
+        Sort sortByEnrollAt = Sort.by(Sort.Direction.ASC, "enrolledAt");
+        PageRequest pageRequest = PageRequest.of(page, size, sortByEnrollAt);
         Page<Enrollment> enrollments = enrollmentRepository.findAll(pageRequest);
         return enrollments.map(enrollmentMapper::toEnrollmentResponse);
     }
@@ -108,7 +107,7 @@ public class EnrollmentServiceImpl implements EnrollmentService{
     }
 
     @Override
-    public EnrollmentResponse updateProgressByCode(String code, EnrollmentUpdateRequest enrollmentUpdateRequest) {
+    public EnrollmentResponse updateProgressByCode(String code, EnrollmentProgressRequest enrollmentProgressRequest) {
     //  check code if exists
     if (!enrollmentRepository.existsByCode(code)){
         throw new ResponseStatusException(
@@ -116,7 +115,7 @@ public class EnrollmentServiceImpl implements EnrollmentService{
         );
     }
         Enrollment enrollment = enrollmentRepository.findByCode(code);
-        enrollmentMapper.fromUserUpdateRequest(enrollmentUpdateRequest, enrollment);
+        enrollmentMapper.fromUserUpdateRequest(enrollmentProgressRequest, enrollment);
         enrollment = enrollmentRepository.save(enrollment);
         return enrollmentMapper.toEnrollmentResponse(enrollment);
     }
@@ -138,7 +137,7 @@ public class EnrollmentServiceImpl implements EnrollmentService{
             isCompleted = true;
         }
 
-        if (isCompleted == false){
+        if (!isCompleted){
            return new BasedMessage("Student has been not complete course yet!");
         }
         return new BasedMessage("Student has been successfully completed course!");

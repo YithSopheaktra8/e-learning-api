@@ -32,6 +32,7 @@ public class UserController {
     ){
         return userService.findAll(page, size, sortDirection, userName, email, nationalIdCard, phoneNumber, name, gender, role);
     }
+
     // Find user detail by username
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{username}")

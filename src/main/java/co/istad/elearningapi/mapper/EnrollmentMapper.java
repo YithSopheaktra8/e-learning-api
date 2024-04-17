@@ -2,6 +2,7 @@ package co.istad.elearningapi.mapper;
 
 import co.istad.elearningapi.domain.Enrollment;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentCreateRequest;
+import co.istad.elearningapi.features.enrollment.dto.EnrollmentProgressResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
 import org.mapstruct.Mapper;
 
@@ -10,4 +11,5 @@ public interface EnrollmentMapper {
     Enrollment fromEnrollCreateRequest(EnrollmentCreateRequest enrollmentCreateRequest);
 
     EnrollmentResponse toEnrollmentResponse(Enrollment enrollment);
+    EnrollmentProgressResponse toEnrollmentProgressResponse(Enrollment enrollment);
 }

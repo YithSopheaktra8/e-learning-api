@@ -4,6 +4,7 @@ import co.istad.elearningapi.domain.Course;
 import co.istad.elearningapi.domain.Student;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.List;
 public record EnrollmentResponse(
         @NotBlank
         String code,
+
+        @Size(max = 100)
         Integer progress,
         LocalDateTime enrolledAt,
         Boolean isCertified,

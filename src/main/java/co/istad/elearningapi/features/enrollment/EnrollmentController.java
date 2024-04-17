@@ -1,6 +1,7 @@
 package co.istad.elearningapi.features.enrollment;
 
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentCreateRequest;
+import co.istad.elearningapi.features.enrollment.dto.EnrollmentProgressResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ public class EnrollmentController {
             String sortOrder
     ){
         return enrollmentService.findAllEnrollment(page, size, sortOrder);
+    }
+
+    @GetMapping("/{code}/progress")
+    public EnrollmentProgressResponse findEnrollmentProgress(@PathVariable String code){
+        return enrollmentService.findEnrollmentProgress(code);
     }
 
 }

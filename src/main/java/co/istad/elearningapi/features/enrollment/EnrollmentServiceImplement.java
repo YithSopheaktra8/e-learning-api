@@ -3,8 +3,8 @@ package co.istad.elearningapi.features.enrollment;
 import co.istad.elearningapi.domain.Course;
 import co.istad.elearningapi.domain.Enrollment;
 import co.istad.elearningapi.features.course.CourseRepository;
-import co.istad.elearningapi.features.enrollment.dto.CourseIdResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentCreateRequest;
+import co.istad.elearningapi.features.enrollment.dto.EnrollmentProgressResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
 import co.istad.elearningapi.mapper.EnrollmentMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -46,9 +43,12 @@ public class EnrollmentServiceImplement implements EnrollmentService{
         Course selectCourse = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "You can not select this course"
+                        "Course ID has been not found!"
                 ));
         enrollment.setCourse(selectCourse);  // Set a single course directly
+
+        // set info for student (wait for student feature ready)
+
 
         enrollmentRepository.save(enrollment);
     }
@@ -68,4 +68,26 @@ public class EnrollmentServiceImplement implements EnrollmentService{
         Page<Enrollment> enrollments = enrollmentRepository.findAll(pageRequest);
         return enrollments.map(enrollmentMapper::toEnrollmentResponse);
     }
+
+    @Override
+    public EnrollmentProgressResponse findEnrollmentProgress(String code) {
+        if (!enrollmentRepository.existsByCode(code)){
+           throw new ResponseStatusException(
+                   HttpStatus.NOT_FOUND,
+                   "This student has been not found!"
+           );
+       }
+        // Retrieve the enrollment using the code
+        Enrollment enrollment = enrollmentRepository.findByCode(code);
+        if (enrollment == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "This student has not been found!"
+            );
+        }
+
+        // Map the progress of the enrollment to the response
+        return enrollmentMapper.toEnrollmentProgressResponse(enrollment);
+    }
+
 }

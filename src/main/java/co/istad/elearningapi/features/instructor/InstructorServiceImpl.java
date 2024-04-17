@@ -140,17 +140,27 @@ public class InstructorServiceImpl implements InstructorService{
     }
 
     @Override
-    public InstructorResponse updateInstructor(String username, InstructorCreateRequest instructorCreateRequest) {
+    public void updateInstructor(String username, InstructorCreateRequest instructorCreateRequest) {
 
         Instructor instructor = instructorRepository.findInstructorByUserUserName(username)
-                .orElseThrow(() -> new RuntimeException(
-                        "Instructor not found with username: " + username));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Instructor has not been found"
+                ));
 
-        Instructor updatedInstructor = instructorMapper.instructorCreateRequestToInstructor(instructorCreateRequest, userRepository);
-        updatedInstructor.setId(instructor.getId());
-        updatedInstructor = instructorRepository.save(updatedInstructor);
+        instructor.getUser().setUserName(username);
+        instructor.setGivenName(instructorCreateRequest.givenName());
+        instructor.setBiography(instructorCreateRequest.biography());
+        instructor.setJobTitle(instructorCreateRequest.jobTitle());
+        instructor.setNationalIdCard(instructorCreateRequest.nationalIdCard());
+        instructor.setFamilyName(instructorCreateRequest.familyName());
+        instructor.setGithub(instructorCreateRequest.github());
+        instructor.setLinkedIn(instructorCreateRequest.linkedIn());
+        instructor.setProfile(instructorCreateRequest.profile());
+        instructor.setWebsite(instructorCreateRequest.website());
 
-        return instructorMapper.instructorToInstructorResponse(updatedInstructor);
+        instructorRepository.save(instructor);
+
     }
 
     @Override

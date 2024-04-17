@@ -38,8 +38,8 @@ public class InstructorController {
     }
 
     @PutMapping("/{username}")
-    InstructorResponse updateInstructor(@PathVariable String username,
-                                        @RequestBody InstructorCreateRequest instructorCreateRequest){
-        return instructorService.updateInstructor(username, instructorCreateRequest);
+    void updateInstructor(@PathVariable String username,
+                          @RequestBody InstructorCreateRequest instructorCreateRequest){
+        instructorService.updateInstructor(username, instructorCreateRequest);
     }
 }

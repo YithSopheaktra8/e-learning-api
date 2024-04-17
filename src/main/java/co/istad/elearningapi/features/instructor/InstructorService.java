@@ -11,6 +11,6 @@ public interface InstructorService {
     void createInstructor(InstructorCreateRequest instructorCreateRequest);
 
     Page<InstructorResponse> findAllInstructors(int page, int size);
-    InstructorResponse updateInstructor(String username, InstructorCreateRequest instructorCreateRequest);
+    void updateInstructor(String username, InstructorCreateRequest instructorCreateRequest);
     InstructorResponse findInstructorByUsername(String username);
 }

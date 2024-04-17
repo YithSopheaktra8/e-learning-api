@@ -49,7 +49,7 @@ public class User {
 
     private String profile;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false,unique = true)
     private String userName;
 
     @Column(nullable = false,unique = true)
@@ -61,7 +61,7 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     private City city;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "id"))
     List<Role> roles;

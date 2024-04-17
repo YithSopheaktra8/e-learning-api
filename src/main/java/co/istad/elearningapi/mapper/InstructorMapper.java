@@ -11,9 +11,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface InstructorMapper {
 
-
+    @Mapping(source = "user.userName", target = "username")
     InstructorResponse instructorToInstructorResponse(Instructor instructor);
-
 
     Instructor instructorCreateRequestToInstructor(InstructorCreateRequest instructorCreateRequest, @Context UserRepository userRepository);
 

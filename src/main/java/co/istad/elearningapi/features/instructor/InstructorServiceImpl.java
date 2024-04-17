@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -35,43 +36,42 @@ public class InstructorServiceImpl implements InstructorService{
     private final CityRepository cityRepository;
     private final RoleRepository roleRepository;
 
+    @Transactional
     @Override
-    public InstructorResponse createInstructor(InstructorCreateRequest instructorCreateRequest) {
+    public void createInstructor(InstructorCreateRequest instructorCreateRequest) {
 
-        Country newCountry = new Country();
 
         if(!countryRepository.existsByName(instructorCreateRequest.country().toUpperCase())){
-            newCountry = Country.builder()
+
+            Country newCountry = Country.builder()
                     .name(instructorCreateRequest.country().toUpperCase())
-                    .cities(List.of(City.builder()
-                            .country(newCountry)
-                            .name(instructorCreateRequest.city().toUpperCase())
-                            .build()))
                     .numCode(855)
                     .phoneCode(999)
                     .niceName("Country")
                     .phoneCode(855)
                     .iso("99-ISO")
+                    .flag("flag.png")
                     .build();
+
+            City city = City.builder()
+                    .name(instructorCreateRequest.city().toUpperCase())
+                    .country(newCountry)
+                    .build();
+
+            cityRepository.save(city);
+            countryRepository.save(newCountry);
         }
 
-        Country oldCountry = countryRepository.findCountryByName(instructorCreateRequest.country().toUpperCase());
+        Country oldCountry = countryRepository.findCountryByNameIgnoreCase(instructorCreateRequest.country().toUpperCase());
 
-
-        if(!cityRepository.existsByName(instructorCreateRequest.city().toUpperCase()))  {
-
-        }
-
-
+        City city = cityRepository.findByName(instructorCreateRequest.city().toUpperCase());
 
         Role instrutorRole = roleRepository.findByName("INSTRUCTOR");
 
         User user = User.builder()
                 .uuid(UUID.randomUUID().toString())
-                .country(countryRepository.existsByName(instructorCreateRequest.country().toUpperCase()) ? newCountry : oldCountry)
-                .city(City.builder()
-                        .name(instructorCreateRequest.city())
-                        .build())
+                .country(oldCountry)
+                .city(city)
                 .roles(List.of(instrutorRole))
                 .isVerified(false)
                 .dob(instructorCreateRequest.dob())
@@ -104,19 +104,39 @@ public class InstructorServiceImpl implements InstructorService{
                 .user(user)
                 .build();
 
-        Instructor savedInstructor = instructorRepository.save(instructor);
-        return instructorMapper.instructorToInstructorResponse(savedInstructor);
+        userRepository.save(user);
+       instructorRepository.save(instructor);
     }
 
     @Override
-    public List<InstructorResponse> findAllInstructors(int page, int size) {
+    public Page<InstructorResponse> findAllInstructors(int page, int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Instructor> instructorPage = instructorRepository.findAll(pageable);
+        if(page < 0 ){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "page number must be greater than 0"
+            );
+        }
 
-        return instructorPage.stream()
-                .map(instructorMapper::instructorToInstructorResponse)
-                .collect(Collectors.toList());
+        if(size < 1){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Size must be greater than 1!"
+            );
+        }
+
+
+        PageRequest pageRequest = PageRequest.of(page,size);
+        Page<Instructor> instructors = instructorRepository.findAllByIsDeletedFalse(pageRequest);
+
+        if(instructors.isEmpty()){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "There is no instructor!"
+            );
+        }
+
+        return instructors.map(instructorMapper::instructorToInstructorResponse);
     }
 
     @Override

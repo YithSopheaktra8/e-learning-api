@@ -1,7 +1,9 @@
 package co.istad.elearningapi.features.instructor.dto;
 
+import co.istad.elearningapi.features.user.dto.UserSnippetResponse;
+
 public record InstructorResponse(
-        Integer id,
+        String username,
         String biography,
         String givenName,
         String jobTitle,
@@ -10,8 +12,6 @@ public record InstructorResponse(
         String github,
         String linkedIn,
         String profile,
-        String website,
-        Long userId
-       // UserDetailsResponse user
+        String website
 ) {
 }

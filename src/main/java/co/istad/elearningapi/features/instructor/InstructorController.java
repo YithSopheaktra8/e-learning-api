@@ -6,6 +6,7 @@ import co.istad.elearningapi.features.instructor.dto.InstructorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,8 @@ public class InstructorController {
 
 
     @GetMapping
-    public List<InstructorResponse> findAllInstructors(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public Page<InstructorResponse> findAllInstructors(@RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "10") int size){
         return instructorService.findAllInstructors(page, size);
     }
 

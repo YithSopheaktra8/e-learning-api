@@ -15,5 +15,7 @@ public interface CountryRepository extends JpaRepository <Country , String> {
 
     Country findCountryByName(String name);
 
+    Country findCountryByNameIgnoreCase(String name);
+
     Boolean existsByName(String name);
 }

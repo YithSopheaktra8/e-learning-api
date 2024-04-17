@@ -11,5 +11,6 @@ import java.util.List;
 public interface CityMapper {
     @Mapping(source = "country.name", target = "country")
     CityResponse toCityResponse(City city);
+
     List<CityResponse> toListCityResponse(List<City> cities);
 }

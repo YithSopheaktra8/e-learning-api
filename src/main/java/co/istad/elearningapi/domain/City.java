@@ -19,6 +19,6 @@ public class City {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Country country;
 }

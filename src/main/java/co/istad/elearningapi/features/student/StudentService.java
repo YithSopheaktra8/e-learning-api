@@ -11,7 +11,7 @@ public interface StudentService {
 
     void createStudent(StudentCreateRequest studentCreateRequest);
 
-    Page<CategoryResponse> findAllCategory(int page, int size);
+    Page<StudentResponse> findAllStudent(int page, int size);
 
 
 }

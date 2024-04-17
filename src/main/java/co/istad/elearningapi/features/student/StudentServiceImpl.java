@@ -1,15 +1,19 @@
 package co.istad.elearningapi.features.student;
 
+import co.istad.elearningapi.domain.Category;
 import co.istad.elearningapi.domain.Role;
 import co.istad.elearningapi.domain.Student;
 import co.istad.elearningapi.domain.User;
 import co.istad.elearningapi.features.category.dto.CategoryResponse;
 import co.istad.elearningapi.features.role.RoleRepository;
 import co.istad.elearningapi.features.student.dto.StudentCreateRequest;
+import co.istad.elearningapi.features.student.dto.StudentResponse;
 import co.istad.elearningapi.features.user.UserRepository;
+import co.istad.elearningapi.mapper.StudentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +33,7 @@ public class StudentServiceImpl implements StudentService{
     private final StudentRepository studentRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final StudentMapper studentMapper;
 
 
     @Transactional
@@ -88,10 +93,25 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public Page<CategoryResponse> findAllCategory(int page, int size) {
+    public Page<StudentResponse> findAllStudent(int page, int size) {
 
-        Student student;
+        if(page < 0 ){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "page number must be greater than 0"
+            );
+        }
 
-        return null;
+        if(size < 1){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Size must be greater than 1!"
+            );
+        }
+
+        PageRequest pageRequest = PageRequest.of(page,size);
+        Page<Student> students = studentRepository.findAll(pageRequest);
+
+        return students.map(studentMapper::toStudentResponse);
     }
 }

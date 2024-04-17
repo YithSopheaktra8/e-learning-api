@@ -13,6 +13,6 @@ public record UserDetailsResponse(
         String profile,
         LocalDate dob,
         Country country,
-        List<Role> roles
+        List<Role> roleList
 ) {
 }

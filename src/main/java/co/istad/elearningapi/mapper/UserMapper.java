@@ -6,13 +6,17 @@ import co.istad.elearningapi.features.role.dto.RoleResponse;
 import co.istad.elearningapi.features.user.dto.UserDetailsResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = RoleMapper.class)
 public interface UserMapper {
  // @Mapping(source = "ListCountry", target = "country", qualifiedByName = "mapCountryResponse")
-  UserDetailsResponse toUserDetailResponse (User user);
+
+ @Mapping(source = "roles", target = "roleList", qualifiedByName = "mapRoleResponse")
+ UserDetailsResponse toUserDetailResponse(User user);
+
 
 
 }

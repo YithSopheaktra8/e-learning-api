@@ -9,6 +9,7 @@ import co.istad.elearningapi.features.enrollment.dto.EnrollmentProgressResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentUpdateRequest;
 import co.istad.elearningapi.mapper.EnrollmentMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -128,6 +129,19 @@ public class EnrollmentServiceImplement implements EnrollmentService{
            return new BasedMessage("Student has been not complete course yet!");
         }
         return new BasedMessage("Student has been successfully completed course!");
+    }
+
+    @Transactional
+    @Override
+    public BasedMessage disableEnrollment(String code) {
+        //  check code if exists
+        if (!enrollmentRepository.existsByCode(code)){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "This student has not been found!"
+            );
+        }
+        enrollmentRepository.disableByCode(code);
+        return new BasedMessage("This enrollment has been disabled!");
     }
 
 }

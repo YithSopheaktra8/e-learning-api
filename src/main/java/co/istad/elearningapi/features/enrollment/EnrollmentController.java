@@ -48,4 +48,8 @@ public class EnrollmentController {
         return enrollmentService.updateCertification(code);
     }
 
+    @PutMapping("/{code}")
+    BasedMessage disableEnrollment(@PathVariable String code) {
+        return enrollmentService.disableEnrollment(code);
+    }
 }

@@ -18,4 +18,6 @@ public interface EnrollmentService {
 
     BasedMessage updateCertification(String code);
 
+    BasedMessage disableEnrollment(String code);
+
 }

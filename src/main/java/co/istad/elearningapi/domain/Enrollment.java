@@ -38,4 +38,5 @@ public class Enrollment {
     @OneToMany
     @JoinColumn(name = "student_id")
     List<Student> students;
+
 }

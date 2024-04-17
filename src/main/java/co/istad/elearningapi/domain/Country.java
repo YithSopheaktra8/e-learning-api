@@ -35,8 +35,6 @@ public class Country {
     @Column(nullable = false)
     private Integer phoneCode;
 
-    @OneToMany()
-    @JoinTable(name = "countries_cities", joinColumns = @JoinColumn(name = "country_id", referencedColumnName = "id"),
-                inverseJoinColumns = @JoinColumn(name = "cities_id",referencedColumnName = "id"))
+    @OneToMany(mappedBy = "country")
     List<City> cities;
 }

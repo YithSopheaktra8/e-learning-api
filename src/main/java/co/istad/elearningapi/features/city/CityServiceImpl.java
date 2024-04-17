@@ -30,7 +30,7 @@ public class CityServiceImpl implements CityService {
             );
         }
 
-        return cityMapper.toDTO(cities);
+        return cityMapper.toListCityResponse(cities);
     }
 
 

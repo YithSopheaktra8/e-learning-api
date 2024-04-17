@@ -10,6 +10,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CityMapper {
     @Mapping(source = "country.name", target = "country")
-    CityResponse toDTO(City city);
-    List<CityResponse> toDTO(List<City> cities);
+    CityResponse toCityResponse(City city);
+    List<CityResponse> toListCityResponse(List<City> cities);
 }

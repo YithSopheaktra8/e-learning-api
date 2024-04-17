@@ -10,5 +10,5 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CountryMapper {
     @Mapping(source = "name", target = "countryName")
-    List<CountryResponse> toDTO(List<Country> countries);
+    List<CountryResponse> toListCountryResponse(List<Country> countries);
 }

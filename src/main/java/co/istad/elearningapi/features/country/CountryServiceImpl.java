@@ -1,6 +1,5 @@
 package co.istad.elearningapi.features.country;
 
-import co.istad.elearningapi.domain.City;
 import co.istad.elearningapi.domain.Country;
 import co.istad.elearningapi.features.city.CityRepository;
 import co.istad.elearningapi.features.city.dto.CityResponse;
@@ -37,7 +36,7 @@ public class CountryServiceImpl implements CountryService{
                     "There is no countries!"
             );
         }
-        return countryMapper.toDTO(countries);
+        return countryMapper.toListCountryResponse(countries);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class CountryServiceImpl implements CountryService{
         if (countryOptional.isPresent()) {
             Country country = countryOptional.get();
             return country.getCities().stream()
-                    .map(cityMapper::toDTO)
+                    .map(cityMapper::toCityResponse)
                     .collect(Collectors.toList());
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Country not found with ISO code: " + iso);

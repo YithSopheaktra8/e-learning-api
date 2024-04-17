@@ -1,12 +1,12 @@
 package co.istad.elearningapi.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Getter
 @Setter
@@ -17,7 +17,7 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 25)
+    @Column(length = 300)
     private String flag;
 
     @Column(length = 10, nullable = false)

@@ -19,7 +19,7 @@ public class Role {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "roles_authorities", joinColumns = @JoinColumn(name = "roles_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authorities_id",referencedColumnName = "id"))
     List<Authority> authorities;

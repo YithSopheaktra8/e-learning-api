@@ -17,6 +17,4 @@ public class Authority {
     private Integer id;
 
     private String name;
-
-
 }

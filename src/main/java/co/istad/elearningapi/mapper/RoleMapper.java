@@ -13,9 +13,9 @@ public interface RoleMapper {
    // @Mapping(source = "authorities", target = "authorityResponse", qualifiedByName = "mapAuthorityResponse")
     RoleResponse toRoleResponse(Role role);
 
+    @Named("mapRoleToResponseList")
     default List<RoleResponse> mapRoleToResponseList(List<Role> roles) {
-        return roles.stream()
-                .map(this::toRoleResponse).toList();
+        return roles.stream().map(this::toRoleResponse).toList();
     }
 }
 

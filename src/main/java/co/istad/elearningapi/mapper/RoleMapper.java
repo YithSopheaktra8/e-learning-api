@@ -8,15 +8,18 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = AuthorityMapper.class)
+@Mapper(componentModel = "spring")
 public interface RoleMapper {
-    @Mapping(source = "authorities", target = "authorityResponse", qualifiedByName = "mapAuthorityResponse")
+   // @Mapping(source = "authorities", target = "authorityResponse", qualifiedByName = "mapAuthorityResponse")
     RoleResponse toRoleResponse(Role role);
-    @Named("mapRoleResponse")
-    List<RoleResponse> toRoleResponseList(List<Role> roles);
 
-
+    @Named("mapRoleToResponseList")
+    default List<RoleResponse> mapRoleToResponseList(List<Role> roles) {
+        return roles.stream().map(this::toRoleResponse).toList();
+    }
 }
+
+
 
 
 

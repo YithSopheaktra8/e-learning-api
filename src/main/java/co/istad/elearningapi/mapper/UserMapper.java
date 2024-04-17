@@ -11,11 +11,15 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {
+        RoleMapper.class
+})
 public interface UserMapper {
 
+ // @Mapping(source = "ListCountry", target = "country", qualifiedByName = "mapCountryResponse")
 
-  UserDetailsResponse toUserDetailResponse (User user);
+ @Mapping(source = "roles", target = "roleList")
+ UserDetailsResponse toUserDetailResponse(User user);
 
   @Named("toUserSnippetResponse")
   UserSnippetResponse toUserSnippetResponse(User user);

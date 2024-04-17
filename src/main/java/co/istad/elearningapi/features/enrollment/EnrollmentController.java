@@ -3,6 +3,7 @@ package co.istad.elearningapi.features.enrollment;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentCreateRequest;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentProgressResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
+import co.istad.elearningapi.features.enrollment.dto.EnrollmentUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,12 @@ public class EnrollmentController {
     @GetMapping("/{code}/progress")
     public EnrollmentProgressResponse findEnrollmentProgress(@PathVariable String code){
         return enrollmentService.findEnrollmentProgress(code);
+    }
+
+    @PatchMapping("/{code}/progress")
+    EnrollmentResponse updateProgressByCode(@PathVariable String code,
+                              @RequestBody EnrollmentUpdateRequest enrollmentUpdateRequest) {
+        return enrollmentService.updateProgressByCode(code, enrollmentUpdateRequest);
     }
 
 }

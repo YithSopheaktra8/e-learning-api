@@ -6,6 +6,7 @@ import co.istad.elearningapi.features.course.CourseRepository;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentCreateRequest;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentProgressResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
+import co.istad.elearningapi.features.enrollment.dto.EnrollmentUpdateRequest;
 import co.istad.elearningapi.mapper.EnrollmentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -88,6 +89,20 @@ public class EnrollmentServiceImplement implements EnrollmentService{
 
         // Map the progress of the enrollment to the response
         return enrollmentMapper.toEnrollmentProgressResponse(enrollment);
+    }
+
+    @Override
+    public EnrollmentResponse updateProgressByCode(String code, EnrollmentUpdateRequest enrollmentUpdateRequest) {
+    //  check code if exists
+    if (!enrollmentRepository.existsByCode(code)){
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "This student has not been found!"
+        );
+    }
+        Enrollment enrollment = enrollmentRepository.findByCode(code);
+        enrollmentMapper.fromUserUpdateRequest(enrollmentUpdateRequest, enrollment);
+        enrollment = enrollmentRepository.save(enrollment);
+        return enrollmentMapper.toEnrollmentResponse(enrollment);
     }
 
 }

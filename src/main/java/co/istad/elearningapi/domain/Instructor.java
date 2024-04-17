@@ -39,6 +39,6 @@ public class Instructor {
 
     private String website;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
 }

@@ -66,7 +66,8 @@ public class DataInit {
             countryRepository.save(cambodia);
 
 
-            Country cam = countryRepository.findByName("CAMBODIA");
+            Country cam = countryRepository.findByName("CAMBODIA")
+                    .orElseThrow();
 
             List<City> cambodiaCities = new ArrayList<>();
             City pp = City.builder()
@@ -103,7 +104,8 @@ public class DataInit {
                     .build();
             countryRepository.save(singapore);
 
-            Country sgp = countryRepository.findByName("SINGAPORE");
+            Country sgp = countryRepository.findByName("SINGAPORE")
+                    .orElseThrow(()-> new RuntimeException("can not init country"));;
             List<City> singaporeCities = new ArrayList<>();
 
             City kg = City.builder()
@@ -127,40 +129,41 @@ public class DataInit {
     }
 
     @PostConstruct
-    void initAdmin(){
-
-        if(userRepository.count() < 1){
-            LocalDate dob = LocalDate.of(1999,7,1);
-            Country cam = countryRepository.findByName("CAMBODIA");
-            City city = cityRepository.findByName("PHNOM PENH");
-            Role role = roleRepository.findByName("ADMIN");
-
-            log.info("city {}",city);
-            log.info("country {}",cam);
-
-            User admin = User.builder()
-                    .uuid(UUID.randomUUID().toString())
-                    .isDeleted(false)
-                    .isVerified(true)
-                    .password("tra1122")
-                    .profile("AVATAR.PNG")
-                    .dob(dob)
-                    .userName("pheaktra")
-                    .email("pheaktra@gmail.com")
-                    .familyName("yith")
-                    .givenName("sopheaktra")
-                    .address1("Phnom Penh")
-                    .gender("Male")
-                    .country(cam)
-                    .city(city)
-                    .roles(List.of(role))
-                    .nationalIdCard("12311461")
-                    .phoneNumber("0967174832")
-                    .build();
-
-            userRepository.save(admin);
-        }
-    }
+//    void initAdmin(){
+//
+//        if(userRepository.count() < 1){
+//            LocalDate dob = LocalDate.of(1999,7,1);
+//            Country cam = countryRepository.findByName("CAMBODIA")
+//                    .orElseThrow();
+//            City city = cityRepository.findByName("PHNOM PENH");
+//            Role role = roleRepository.findByName("ADMIN");
+//
+//            log.info("city {}",city);
+//            log.info("country {}",cam);
+//
+//            User admin = User.builder()
+//                    .uuid(UUID.randomUUID().toString())
+//                    .isDeleted(false)
+//                    .isVerified(true)
+//                    .password("tra1122")
+//                    .profile("AVATAR.PNG")
+//                    .dob(dob)
+//                    .userName("pheaktra")
+//                    .email("pheaktra@gmail.com")
+//                    .familyName("yith")
+//                    .givenName("sopheaktra")
+//                    .address1("Phnom Penh")
+//                    .gender("Male")
+//                    .country(cam)
+//                    .city(city)
+//                    .roles(List.of(role))
+//                    .nationalIdCard("12311461")
+//                    .phoneNumber("0967174832")
+//                    .build();
+//
+//            userRepository.save(admin);
+//        }
+//    }
 
     private List<Authority> createUserAuthorities() {
         Authority userRead = new Authority();

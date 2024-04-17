@@ -55,13 +55,13 @@ public class User {
     @Column(nullable = false,unique = true)
     private String uuid;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Country country;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private City city;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "id"))
     List<Role> roles;

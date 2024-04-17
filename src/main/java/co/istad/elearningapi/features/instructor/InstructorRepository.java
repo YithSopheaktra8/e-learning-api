@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface InstructorRepository extends JpaRepository<Instructor , Integer> {
+
     Optional<Instructor> findInstructorByUserUserName(String username);
+
 }

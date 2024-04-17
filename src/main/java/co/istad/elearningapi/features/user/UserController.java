@@ -1,6 +1,7 @@
 package co.istad.elearningapi.features.user;
 
 
+import co.istad.elearningapi.base.BasedMessage;
 import co.istad.elearningapi.domain.Role;
 import co.istad.elearningapi.features.user.dto.UserDetailsResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class UserController {
     // Find all users
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    Page<UserDetailsResponse> findAll(
+    public Page<UserDetailsResponse> findAll(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "25") int size,
             @RequestParam(required = false, defaultValue = "ASC") String sortDirection,
@@ -36,20 +37,20 @@ public class UserController {
     // Find user detail by username
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{username}")
-    UserDetailsResponse findUserDetail(@PathVariable String username){
+    public UserDetailsResponse findUserDetail(@PathVariable String username){
         return userService.findUser(username);
     }
 
     // Disable a user
     @PutMapping("/{username}/disable")
-    void disableUser (@PathVariable String username){
-        userService.disableByUsername(username);
+    public BasedMessage disableUser (@PathVariable String username){
+        return userService.disableByUsername(username);
     }
 
     // Enable a user
     @PutMapping("/{username}/enable")
-    void enableUser (@PathVariable String username){
-        userService.enableByUsername(username);
+    public BasedMessage enableUser (@PathVariable String username){
+        return userService.enableByUsername(username);
     }
 
     // Permanently delete a use

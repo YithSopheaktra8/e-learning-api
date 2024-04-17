@@ -7,26 +7,25 @@ import co.istad.elearningapi.features.user.dto.UserDetailsResponse;
 import co.istad.elearningapi.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.mbeans.UserMBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
     @Override
-    public Page<UserDetailsResponse> findAll(int page , int size, String sortDirection, String userName,
-                                             String email,  String nationalIdCard,
+    public Page<UserDetailsResponse> findAll(int page, int size, String sortDirection, String userName,
+                                             String email, String nationalIdCard,
                                              String phoneNumber,
                                              String name,
                                              String gender,
@@ -41,11 +40,11 @@ public class UserServiceImpl implements UserService {
                     "Size must be greater than or equal to one");
         }
         Sort.Direction direction = Sort.Direction.DESC;
-        if(sortDirection.equalsIgnoreCase("ASC")){
+        if (sortDirection.equalsIgnoreCase("ASC")) {
             direction = Sort.Direction.ASC;
         }
         Sort sortById = Sort.by(direction, "id");
-        PageRequest pageRequest =PageRequest.of(page, size , sortById);
+        PageRequest pageRequest = PageRequest.of(page, size, sortById);
 
         //filter
         Page<User> users;
@@ -76,14 +75,15 @@ public class UserServiceImpl implements UserService {
                 () -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "User does not exist!"
-        ));
-       return userMapper.toUserDetailResponse(user);
+                ));
+        return userMapper.toUserDetailResponse(user);
     }
 
+    @Transactional
     @Override
     public BasedMessage disableByUsername(String username) {
-        if(!userRepository.existsUserByUserName(username)){
-            throw  new ResponseStatusException(
+        if (!userRepository.existsUserByUserName(username)) {
+            throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     "User does not exist!"
             );
@@ -92,10 +92,11 @@ public class UserServiceImpl implements UserService {
         return new BasedMessage("User has been disable");
     }
 
+    @Transactional
     @Override
     public BasedMessage enableByUsername(String username) {
-        if(!userRepository.existsUserByUserName(username)){
-            throw  new ResponseStatusException(
+        if (!userRepository.existsUserByUserName(username)) {
+            throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     "User does not exist!"
             );
@@ -104,14 +105,16 @@ public class UserServiceImpl implements UserService {
         return new BasedMessage("User has been enable");
     }
 
+    @Transactional
     @Override
-    public void deleteByUserName(String username) {
-        if(!userRepository.existsUserByUserName(username)){
-            throw  new ResponseStatusException(
+    public BasedMessage deleteByUserName(String username) {
+        if (!userRepository.existsUserByUserName(username)) {
+            throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     "User does not exist!"
             );
         }
         userRepository.deleteByUserName(username);
+        return new BasedMessage("User has been deleted successfully");
     }
 }

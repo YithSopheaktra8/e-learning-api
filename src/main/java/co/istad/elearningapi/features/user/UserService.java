@@ -18,12 +18,9 @@ public interface UserService {
 
     UserDetailsResponse findUser(String username);
 
-    @Transactional
     BasedMessage disableByUsername(String username);
 
-    @Transactional
     BasedMessage enableByUsername(String username);
 
-    @Transactional
-    void deleteByUserName(String username);
+    BasedMessage deleteByUserName(String username);
 }

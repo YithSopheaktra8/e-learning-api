@@ -20,5 +20,5 @@ public interface EnrollmentMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy =
             NullValuePropertyMappingStrategy.IGNORE)
-    void fromUserUpdateRequest(EnrollmentProgressRequest enrollmentProgressRequest, @MappingTarget Enrollment enrollment);
+    void fromUserUpdateRequest(EnrollmentUpdateRequest enrollmentUpdateRequest, @MappingTarget Enrollment enrollment);
 }

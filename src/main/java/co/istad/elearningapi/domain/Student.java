@@ -23,6 +23,7 @@ public class Student {
     private String university;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

@@ -2,6 +2,7 @@ package co.istad.elearningapi.features.student;
 
 import co.istad.elearningapi.features.student.dto.StudentCreateRequest;
 import co.istad.elearningapi.features.student.dto.StudentResponse;
+import co.istad.elearningapi.features.student.dto.StudentUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,17 @@ public class StudentController {
     public Page<StudentResponse> findAll(@RequestParam(defaultValue = "0",required = false) int page,
                                          @RequestParam(defaultValue = "10",required = false) int size){
         return studentService.findAllStudent(page,size);
+    }
+
+    @GetMapping("/{username}")
+    public StudentResponse findByUsername(@PathVariable String username){
+        return studentService.findByUsername(username);
+    }
+
+    @PutMapping("/{username}")
+    public void editStudentProfile(@PathVariable String username,
+                                   @RequestBody StudentUpdateRequest studentUpdateRequest){
+        studentService.editStudentProfile(username,studentUpdateRequest);
     }
 
 }

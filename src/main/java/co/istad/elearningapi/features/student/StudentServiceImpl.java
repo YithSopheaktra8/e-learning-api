@@ -8,6 +8,7 @@ import co.istad.elearningapi.features.category.dto.CategoryResponse;
 import co.istad.elearningapi.features.role.RoleRepository;
 import co.istad.elearningapi.features.student.dto.StudentCreateRequest;
 import co.istad.elearningapi.features.student.dto.StudentResponse;
+import co.istad.elearningapi.features.student.dto.StudentUpdateRequest;
 import co.istad.elearningapi.features.user.UserRepository;
 import co.istad.elearningapi.mapper.StudentMapper;
 import lombok.RequiredArgsConstructor;
@@ -113,5 +114,48 @@ public class StudentServiceImpl implements StudentService{
         Page<Student> students = studentRepository.findAll(pageRequest);
 
         return students.map(studentMapper::toStudentResponse);
+    }
+
+    @Override
+    public StudentResponse findByUsername(String username) {
+
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(()-> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "This user does not exist"
+                ));
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(()->new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "This student does not exist"
+                ));
+
+        return studentMapper.toStudentResponse(student);
+    }
+
+
+    @Override
+    public void editStudentProfile(String username , StudentUpdateRequest studentUpdateRequest) {
+
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(()-> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "This user does not exist"
+                ));
+
+        Student student = studentRepository.findByUser(user)
+                .orElseThrow(()->new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "This student does not exist"
+                ));
+
+
+        studentMapper.editUserStudentProfile(studentUpdateRequest,user);
+        studentMapper.editStudentProfile(studentUpdateRequest,student);
+
+        studentRepository.save(student);
+        userRepository.save(user);
+
     }
 }

@@ -5,6 +5,7 @@ import co.istad.elearningapi.features.city.dto.CityResponse;
 import co.istad.elearningapi.mapper.CityMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,7 +21,8 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<CityResponse> findAll(String name) {
-        List<City> cities = cityRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.ASC,"name");
+        List<City> cities = cityRepository.findAll(sort);
         if(cities.isEmpty()){
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,

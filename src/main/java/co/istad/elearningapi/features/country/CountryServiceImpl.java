@@ -9,6 +9,7 @@ import co.istad.elearningapi.mapper.CityMapper;
 import co.istad.elearningapi.mapper.CountryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,7 +29,8 @@ public class CountryServiceImpl implements CountryService{
 
     @Override
     public List<CountryResponse> findAllCountries(String name) {
-        List<Country> countries = countryRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.ASC,"name");
+        List<Country> countries = countryRepository.findAll(sort);
         if(countries.isEmpty()){
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,

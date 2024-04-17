@@ -5,9 +5,11 @@ import jakarta.validation.constraints.Size;
 
 
 public record EnrollmentCreateRequest(
-        @NotBlank
-        String code
-//        StudentRequest student
 
+        @NotBlank
+        String course,
+
+        @NotBlank
+        String studentUsername
 ) {
 }

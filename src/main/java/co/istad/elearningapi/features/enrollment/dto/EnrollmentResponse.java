@@ -10,18 +10,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record EnrollmentResponse(
-        @NotBlank
-        String code,
 
-        @Size(max = 100)
+        String code,
         Integer progress,
         LocalDateTime enrolledAt,
         Boolean isCertified,
         Boolean isDeleted,
-        LocalDateTime certifiedAt,
-        @NotEmpty
-        Course course
-//        @NotEmpty
-//        List<Student> students
+        LocalDateTime certifiedAt
 ) {
 }

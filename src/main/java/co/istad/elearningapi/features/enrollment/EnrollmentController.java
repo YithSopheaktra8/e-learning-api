@@ -1,10 +1,7 @@
 package co.istad.elearningapi.features.enrollment;
 
 import co.istad.elearningapi.base.BasedMessage;
-import co.istad.elearningapi.features.enrollment.dto.EnrollmentCreateRequest;
-import co.istad.elearningapi.features.enrollment.dto.EnrollmentProgressResponse;
-import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
-import co.istad.elearningapi.features.enrollment.dto.EnrollmentUpdateRequest;
+import co.istad.elearningapi.features.enrollment.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,8 +16,8 @@ public class EnrollmentController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    void createNewEnroll(@Valid @RequestBody EnrollmentCreateRequest enrollmentCreateRequest, Long courseId){
-        enrollmentService.createNewEnroll(enrollmentCreateRequest, courseId);
+    void createNewEnroll(@Valid @RequestBody EnrollmentCreateRequest enrollmentCreateRequest){
+        enrollmentService.createNewEnroll(enrollmentCreateRequest);
     }
 
     @GetMapping
@@ -35,6 +32,11 @@ public class EnrollmentController {
     @GetMapping("/{code}/progress")
     public EnrollmentProgressResponse findEnrollmentProgress(@PathVariable String code){
         return enrollmentService.findEnrollmentProgress(code);
+    }
+
+    @GetMapping("/{code}")
+    public EnrollmentDetailsResponse findDetailEnrollment(@PathVariable String code){
+        return enrollmentService.findDetailEnrollment(code);
     }
 
     @PatchMapping("/{code}/progress")

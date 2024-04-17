@@ -2,10 +2,10 @@ package co.istad.elearningapi.domain;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Getter
 @Setter

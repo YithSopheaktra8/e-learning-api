@@ -5,6 +5,5 @@ public record CourseDetailsResponse(
         String alias,
         String description,
         String thumbnail
-
 ) {
 }

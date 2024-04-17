@@ -1,14 +1,11 @@
 package co.istad.elearningapi.features.enrollment;
 
 import co.istad.elearningapi.base.BasedMessage;
-import co.istad.elearningapi.features.enrollment.dto.EnrollmentCreateRequest;
-import co.istad.elearningapi.features.enrollment.dto.EnrollmentProgressResponse;
-import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
-import co.istad.elearningapi.features.enrollment.dto.EnrollmentUpdateRequest;
+import co.istad.elearningapi.features.enrollment.dto.*;
 import org.springframework.data.domain.Page;
 
 public interface EnrollmentService {
-    void createNewEnroll(EnrollmentCreateRequest enrollmentCreateRequest, Long courseId);
+    void createNewEnroll(EnrollmentCreateRequest enrollmentCreateRequest);
 
     Page<EnrollmentResponse> findAllEnrollment(int page, int size, String sortOrder);
 
@@ -19,5 +16,7 @@ public interface EnrollmentService {
     BasedMessage updateCertification(String code);
 
     BasedMessage disableEnrollment(String code);
+
+    EnrollmentDetailsResponse findDetailEnrollment(String code);
 
 }

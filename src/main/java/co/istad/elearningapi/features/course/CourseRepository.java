@@ -23,4 +23,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     void disableCourseByAlias(String alias);
 
     boolean existsByAlias(String alias);
+
+    Optional<Course> findByTitle(String title);
 }

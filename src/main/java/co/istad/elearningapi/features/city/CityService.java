@@ -7,5 +7,4 @@ import java.util.List;
 public interface CityService {
     List<CityResponse> findAll(String name);
 
-    List<CityResponse> findAllCitiesInCountry(String iso);
 }

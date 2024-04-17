@@ -31,8 +31,5 @@ public class CityServiceImpl implements CityService {
         return cityMapper.toDTO(cities);
     }
 
-    @Override
-    public List<CityResponse> findAllCitiesInCountry(String iso) {
-        return null;
-    }
+
 }

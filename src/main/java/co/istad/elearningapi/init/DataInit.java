@@ -17,7 +17,9 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class DataInit {
-        private final RoleRepository roleRepository;
+
+    private final RoleRepository roleRepository;
+
     @PostConstruct
     void initRole () {
         if (roleRepository.count() < 1) {

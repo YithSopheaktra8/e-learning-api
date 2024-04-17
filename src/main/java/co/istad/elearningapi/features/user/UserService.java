@@ -17,6 +17,7 @@ public interface UserService {
 
     @Transactional
     BasedMessage enableByUsername(String username);
+
     @Transactional
     void deleteByUserName(String username);
 }

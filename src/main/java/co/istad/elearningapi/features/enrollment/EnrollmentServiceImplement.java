@@ -1,5 +1,6 @@
 package co.istad.elearningapi.features.enrollment;
 
+import co.istad.elearningapi.base.BasedMessage;
 import co.istad.elearningapi.domain.Course;
 import co.istad.elearningapi.domain.Enrollment;
 import co.istad.elearningapi.features.course.CourseRepository;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -103,6 +105,29 @@ public class EnrollmentServiceImplement implements EnrollmentService{
         enrollmentMapper.fromUserUpdateRequest(enrollmentUpdateRequest, enrollment);
         enrollment = enrollmentRepository.save(enrollment);
         return enrollmentMapper.toEnrollmentResponse(enrollment);
+    }
+
+    @Override
+    public BasedMessage updateCertification(String code) {
+        boolean isCompleted = false;
+        //  check code if exists
+        if (!enrollmentRepository.existsByCode(code)){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "This student has not been found!"
+            );
+        }
+        Enrollment enrollment = enrollmentRepository.findByCode(code);
+        if (enrollment.getProgress() == 100 && !enrollment.getIsCertified()) {
+            enrollment.setIsCertified(true);
+            enrollment.setCertifiedAt(LocalDate.now());
+            enrollmentRepository.save(enrollment);
+            isCompleted = true;
+        }
+
+        if (isCompleted == false){
+           return new BasedMessage("Student has been not complete course yet!");
+        }
+        return new BasedMessage("Student has been successfully completed course!");
     }
 
 }

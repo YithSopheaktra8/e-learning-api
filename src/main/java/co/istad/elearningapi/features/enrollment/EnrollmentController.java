@@ -1,5 +1,6 @@
 package co.istad.elearningapi.features.enrollment;
 
+import co.istad.elearningapi.base.BasedMessage;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentCreateRequest;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentProgressResponse;
 import co.istad.elearningapi.features.enrollment.dto.EnrollmentResponse;
@@ -40,6 +41,11 @@ public class EnrollmentController {
     EnrollmentResponse updateProgressByCode(@PathVariable String code,
                               @RequestBody EnrollmentUpdateRequest enrollmentUpdateRequest) {
         return enrollmentService.updateProgressByCode(code, enrollmentUpdateRequest);
+    }
+
+    @PutMapping("/{code}/is-certified")
+    BasedMessage updateProgressByCode(@PathVariable String code) {
+        return enrollmentService.updateCertification(code);
     }
 
 }

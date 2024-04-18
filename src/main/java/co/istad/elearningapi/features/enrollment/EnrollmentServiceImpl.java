@@ -28,7 +28,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EnrollmentServiceImpl implements EnrollmentService{
+public class EnrollmentServiceImpl implements EnrollmentService {
 
     private final EnrollmentRepository enrollmentRepository;
     private final EnrollmentMapper enrollmentMapper;
@@ -40,19 +40,19 @@ public class EnrollmentServiceImpl implements EnrollmentService{
     public void createNewEnroll(EnrollmentCreateRequest enrollmentCreateRequest) {
 
         Course course = courseRepository.findByTitle(enrollmentCreateRequest.course())
-                .orElseThrow(()-> new ResponseStatusException(
+                .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Course has not been found!"
                 ));
 
         User user = userRepository.findByUserName(enrollmentCreateRequest.studentUsername())
-                .orElseThrow(()-> new ResponseStatusException(
+                .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Student does not exist"
                 ));
 
         Student student = studentRepository.findByUser(user)
-                .orElseThrow(()-> new ResponseStatusException(
+                .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Student does not exist"
                 ));
@@ -73,27 +73,27 @@ public class EnrollmentServiceImpl implements EnrollmentService{
     @Override
     public Page<EnrollmentResponse> findAllEnrollment(int page, int size, String sortOrder) {
         //validate page and size >= 0
-        if (page < 0 ){
+        if (page < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page must be greater than or equal to zero");
         }
-        if (size < 1){
+        if (size < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Size must be greater than or equal to one");
         }
-//        Sort sortByDate = Sort.by(sortOrder.equalsIgnoreCase("desc") ?
-//                Sort.Direction.DESC : Sort.Direction.ASC, "enrolledAt");
-        PageRequest pageRequest = PageRequest.of(page, size);
+
+        Sort sortByEnrollAt = Sort.by(Sort.Direction.ASC,"enrolledAt");
+        PageRequest pageRequest = PageRequest.of(page, size,sortByEnrollAt);
         Page<Enrollment> enrollments = enrollmentRepository.findAll(pageRequest);
         return enrollments.map(enrollmentMapper::toEnrollmentResponse);
     }
 
     @Override
     public EnrollmentProgressResponse findEnrollmentProgress(String code) {
-        if (!enrollmentRepository.existsByCode(code)){
-           throw new ResponseStatusException(
-                   HttpStatus.NOT_FOUND,
-                   "This student has been not found!"
-           );
-       }
+        if (!enrollmentRepository.existsByCode(code)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "This student has been not found!"
+            );
+        }
         // Retrieve the enrollment using the code
         Enrollment enrollment = enrollmentRepository.findByCode(code);
         if (enrollment == null) {
@@ -109,12 +109,12 @@ public class EnrollmentServiceImpl implements EnrollmentService{
 
     @Override
     public EnrollmentResponse updateProgressByCode(String code, EnrollmentUpdateRequest enrollmentUpdateRequest) {
-    //  check code if exists
-    if (!enrollmentRepository.existsByCode(code)){
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "This student has not been found!"
-        );
-    }
+        //  check code if exists
+        if (!enrollmentRepository.existsByCode(code)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "This student has not been found!"
+            );
+        }
         Enrollment enrollment = enrollmentRepository.findByCode(code);
         enrollmentMapper.fromUserUpdateRequest(enrollmentUpdateRequest, enrollment);
         enrollment = enrollmentRepository.save(enrollment);
@@ -125,7 +125,7 @@ public class EnrollmentServiceImpl implements EnrollmentService{
     public BasedMessage updateCertification(String code) {
         boolean isCompleted = false;
         //  check code if exists
-        if (!enrollmentRepository.existsByCode(code)){
+        if (!enrollmentRepository.existsByCode(code)) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "This student has not been found!"
             );
@@ -138,8 +138,8 @@ public class EnrollmentServiceImpl implements EnrollmentService{
             isCompleted = true;
         }
 
-        if (isCompleted == false){
-           return new BasedMessage("Student has been not complete course yet!");
+        if (!isCompleted) {
+            return new BasedMessage("Student has been not complete course yet!");
         }
         return new BasedMessage("Student has been successfully completed course!");
     }
@@ -148,7 +148,7 @@ public class EnrollmentServiceImpl implements EnrollmentService{
     @Override
     public BasedMessage disableEnrollment(String code) {
         //  check code if exists
-        if (!enrollmentRepository.existsByCode(code)){
+        if (!enrollmentRepository.existsByCode(code)) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "This student has not been found!"
             );

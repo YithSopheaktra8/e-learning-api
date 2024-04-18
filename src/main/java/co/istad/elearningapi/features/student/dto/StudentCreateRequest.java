@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public record StudentCreateRequest(
         String familyName,
         String givenName,
-        String username,
+        String userName,
         String password,
         String gender,
         String phoneNumber,

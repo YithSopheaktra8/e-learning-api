@@ -2,6 +2,7 @@ package co.istad.elearningapi.mapper;
 
 import co.istad.elearningapi.domain.Student;
 import co.istad.elearningapi.domain.User;
+import co.istad.elearningapi.features.student.dto.StudentCreateRequest;
 import co.istad.elearningapi.features.student.dto.StudentResponse;
 import co.istad.elearningapi.features.student.dto.StudentUpdateRequest;
 import org.mapstruct.*;

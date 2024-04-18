@@ -11,6 +11,7 @@ import co.istad.elearningapi.features.student.dto.StudentResponse;
 import co.istad.elearningapi.features.student.dto.StudentUpdateRequest;
 import co.istad.elearningapi.features.user.UserRepository;
 import co.istad.elearningapi.mapper.StudentMapper;
+import co.istad.elearningapi.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,35 +36,24 @@ public class StudentServiceImpl implements StudentService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final StudentMapper studentMapper;
+    private final UserMapper userMapper;
 
 
     @Transactional
     @Override
     public void createStudent(StudentCreateRequest studentCreateRequest) {
 
-        if(userRepository.existsUserByUserName(studentCreateRequest.username())){
+        if(userRepository.existsUserByUserName(studentCreateRequest.userName())){
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     "User is already existed!"
             );
         }
 
-        User user = new User();
-        user.setUserName(studentCreateRequest.username());
-        user.setEmail(studentCreateRequest.email());
-        user.setDob(studentCreateRequest.dob());
-        user.setPassword(studentCreateRequest.password());
-        user.setAddress1(studentCreateRequest.address1());
-        user.setAddress2(studentCreateRequest.address2());
-        user.setUuid(UUID.randomUUID().toString());
-        user.setPhoneNumber(studentCreateRequest.phoneNumber());
-        user.setGender(studentCreateRequest.gender());
-        user.setFamilyName(studentCreateRequest.familyName());
-        user.setGivenName(studentCreateRequest.givenName());
-        user.setProfile(studentCreateRequest.profile());
-        user.setNationalIdCard(studentCreateRequest.nationalIdCard());
+        User user = userMapper.fromStudentCreateRequest(studentCreateRequest);
         user.setIsDeleted(false);
         user.setIsVerified(false);
+        user.setUuid(UUID.randomUUID().toString());
         // role country
 
         List<Role> roles = new ArrayList<>();
@@ -88,7 +78,7 @@ public class StudentServiceImpl implements StudentService{
 
         log.info("student info:  {}",student);
 
-        userRepository.save(user);
+//        userRepository.save(user);
         studentRepository.save(student);
 
     }
